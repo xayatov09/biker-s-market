@@ -9,7 +9,7 @@ export default function Orders() {
   }, []);
 
   const cancelOrder = (id) => {
-    if (!window.confirm("Buyurtmani bekor qilmoqchimisiz?")) return;
+    if (!window.confirm("Do you want to cancel the order??")) return;
 
     const updated = orders.filter(order => order.id !== id);
     setOrders(updated);
@@ -41,9 +41,9 @@ export default function Orders() {
           <div className="dark:text-gray-400">
             <p>Status: {order.status}</p>
             <p>Subtotal: ${order.subtotal}</p>
-            <p>Chegirma: {order.discount}%</p>
+            <p>Discount: {order.discount}%</p>
             <p className="font-bold">
-              Jami: ${order.finalTotal}
+              Total: ${order.finalTotal}
             </p>
           </div>
 
@@ -60,7 +60,7 @@ export default function Orders() {
             onClick={() => cancelOrder(order.id)}
             className="mt-3 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
-            Bekor qilish
+            Cancel
           </button>
         </div>
       ))}

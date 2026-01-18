@@ -21,6 +21,7 @@ export default function Checkout() {
     setIsLoggedIn(!!localStorage.getItem("user"));
   }, []);
 
+  // agar cart bo'sh bo'lsa, /cart ga yo'naltirish
   useEffect(() => {
     if (cart.length === 0) navigate("/cart");
   }, [cart, navigate]);
@@ -44,11 +45,6 @@ export default function Checkout() {
   };
 
   const placeOrder = () => {
-    if (!isLoggedIn) {
-      alert("Buyurtma berish uchun ro‘yxatdan o‘tishingiz kerak!");
-      return;
-    }
-
     if (!address) {
       alert("Iltimos manzilingizni kiriting!");
       return;
@@ -71,6 +67,14 @@ export default function Checkout() {
     localStorage.removeItem("cart");
 
     navigate("/orders");
+  };
+
+  const handleOrderClick = () => {
+    if (!isLoggedIn) {
+      navigate("/profile"); // ro'yxatdan o'tmagan bo'lsa profilga yo'naltir
+    } else {
+      placeOrder(); // ro'yxatdan o'tgan bo'lsa buyurtma berish
+    }
   };
 
   if (cart.length === 0) return null;
@@ -154,11 +158,10 @@ export default function Checkout() {
           <span>${total.toFixed(2)}</span>
         </div>
 
-        <button onClick={() => navigate("/profile")}
-          
+        <button 
+          onClick={handleOrderClick}
           className="w-full bg-purple-600 text-white py-3 rounded hover:bg-purple-700"
         >
-          
           {isLoggedIn ? "Place an order" : "Register to place an order"}
         </button>
       </div>
