@@ -154,10 +154,11 @@ export default function Checkout() {
           <span>${total.toFixed(2)}</span>
         </div>
 
-        <button
-          onClick={placeOrder}
+        <button onClick={() => navigate("/profile")}
+          
           className="w-full bg-purple-600 text-white py-3 rounded hover:bg-purple-700"
         >
+          
           {isLoggedIn ? "Place an order" : "Register to place an order"}
         </button>
       </div>
