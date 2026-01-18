@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Dark variant */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 🔥 GLOBAL BACKGROUND — ENG MUHIM JOY */
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+/* Light mode */
+body {
+  background-color: #f3f4f6; /* gray-100 */
+}
+
+/* Dark mode */
+.dark body {
+  background-color: #020617; /* slate-950 */
+}
