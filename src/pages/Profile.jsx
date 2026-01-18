@@ -40,7 +40,7 @@ export default function Profile() {
 
   if (welcome) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
+      <div className="dark:bg-gray-900 min-h-screen flex items-center justify-center bg-white dark:bg-black">
         <h1 className="text-3xl font-semibold dark:text-white">Welcome 🎉</h1>
       </div>
     );

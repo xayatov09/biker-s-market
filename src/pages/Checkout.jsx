@@ -13,6 +13,13 @@ export default function Checkout() {
 
   const [promo, setPromo] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [address, setAddress] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // login holatini tekshirish
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("user"));
+  }, []);
 
   useEffect(() => {
     if (cart.length === 0) navigate("/cart");
@@ -37,6 +44,16 @@ export default function Checkout() {
   };
 
   const placeOrder = () => {
+    if (!isLoggedIn) {
+      alert("Buyurtma berish uchun ro‘yxatdan o‘tishingiz kerak!");
+      return;
+    }
+
+    if (!address) {
+      alert("Iltimos manzilingizni kiriting!");
+      return;
+    }
+
     const orders = JSON.parse(localStorage.getItem("orders") || "[]");
 
     const newOrder = {
@@ -45,15 +62,12 @@ export default function Checkout() {
       subtotal,
       discount,
       finalTotal: total,
+      address,
       date: new Date().toLocaleString(),
       status: "Qabul qilindi",
     };
 
-    localStorage.setItem(
-      "orders",
-      JSON.stringify([...orders, newOrder])
-    );
-
+    localStorage.setItem("orders", JSON.stringify([...orders, newOrder]));
     localStorage.removeItem("cart");
 
     navigate("/orders");
@@ -63,21 +77,24 @@ export default function Checkout() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-      
       {/* PRODUCTS */}
       <div className="md:col-span-2 space-y-4">
         {cart.map((item, i) => (
-          <div key={i} className="flex gap-4 border rounded p-4 dark:text-gray-600">
-            <img
-              src={item.image}
-              className="w-28 h-28 object-cover rounded"
-            />
+          <div
+            key={i}
+            className="flex gap-4 border rounded p-4 dark:text-gray-600"
+          >
+            {item.image && (
+              <img
+                src={item.image}
+                className="w-28 h-28 object-cover rounded"
+              />
+            )}
             <div className="dark:text-white">
               <h3 className="font-semibold">{item.name}</h3>
-              <p>Rang: {item.selectedColor}</p>
-              <p>Soni: {item.quantity}</p>
+              <p>Number: {item.quantity}</p>
               <p className="font-medium">
-                ${item.price * item.quantity}
+                ${(item.price * item.quantity).toFixed(2)}
               </p>
             </div>
           </div>
@@ -87,21 +104,22 @@ export default function Checkout() {
       {/* SUMMARY */}
       <div className="border rounded p-6 h-fit">
         <h2 className="text-xl font-bold mb-4 dark:text-white">
-          Buyurtma xulosasi
+          Order summary
         </h2>
 
         <div className="flex justify-between mb-2 dark:text-white">
           <span>Subtotal:</span>
-          <span>${subtotal}</span>
+          <span>${subtotal.toFixed(2)}</span>
         </div>
 
         {discount > 0 && (
           <div className="flex justify-between mb-2 text-green-600 dark:text-white">
-            <span>Chegirma ({discount}%):</span>
-            <span>- ${discountAmount}</span>
+            <span>Discount ({discount}%):</span>
+            <span>- ${discountAmount.toFixed(2)}</span>
           </div>
         )}
 
+        {/* PROMO CODE */}
         <div className="flex gap-2 mt-4">
           <input
             value={promo}
@@ -117,18 +135,30 @@ export default function Checkout() {
           </button>
         </div>
 
+        {/* ADDRESS */}
+        <div className="mt-4">
+          <label className="block mb-2 dark:text-white">Address:</label>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter the address"
+            className="border px-3 py-2 rounded w-full dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
         <hr className="my-4 dark:border-gray-700" />
 
-        <div className="flex justify-between font-bold text-lg mb-6 dark:text-white">
-          <span>Jami:</span>
-          <span>${total}</span>
+        <div className="flex justify-between font-bold text-lg mb-6 dark:text-white mt-4">
+          <span>Total:</span>
+          <span>${total.toFixed(2)}</span>
         </div>
 
         <button
           onClick={placeOrder}
           className="w-full bg-purple-600 text-white py-3 rounded hover:bg-purple-700"
         >
-          Buyurtma berish
+          {isLoggedIn ? "Place an order" : "Register to place an order"}
         </button>
       </div>
     </div>

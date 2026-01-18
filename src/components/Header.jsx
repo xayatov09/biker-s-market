@@ -46,7 +46,7 @@ export default function Header({ search, setSearch }) {
   return (
     <>
       <header className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center p-4 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
-        <Link to="/" className="text-xl font-bold text-purple-600 dark:text-purple-400">
+        <Link to="/" className="text-xl font-bold text-purple-600 dark:text-purple-400 shadow-lg hover:scale-110 transition-transform">
           BikeShop
         </Link>
 
@@ -94,13 +94,25 @@ export default function Header({ search, setSearch }) {
               👤
             </button>
 
+            {/* PROFILE DROPDOWN */}
             {user && openProfile && (
               <div className="absolute right-0 mt-3 w-64 bg-[#0d0d0d] rounded-xl shadow-xl p-4 text-white z-50">
-                <p className="font-semibold">{user.name}</p>
-                <p className="text-sm text-gray-400">{user.email}</p>
+
+                {/* HEADER: USERNAME + CLOSE BUTTON */}
+                <div className="flex justify-between items-center mb-4">
+                  <p className="font-semibold text-lg">{user.name}</p>
+                  <button
+                    onClick={() => setOpenProfile(false)}
+                    className="text-white text-xl font-bold hover:text-red-500"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {/* EXIT BUTTON */}
                 <button
                   onClick={logout}
-                  className="mt-4 w-full text-left text-red-500 hover:bg-[#1f1f1f] px-3 py-2 rounded-lg"
+                  className="w-full text-left text-red-500 hover:bg-[#1f1f1f] px-3 py-2 rounded-lg"
                 >
                   ⎋ Exit
                 </button>
@@ -119,6 +131,14 @@ export default function Header({ search, setSearch }) {
         <div className="fixed inset-0 z-50 bg-black/60 flex justify-center items-center">
           <div className="w-full max-w-lg bg-[#0d0d0d] rounded-2xl p-6 text-white">
             <h2 className="text-2xl font-semibold mb-6">Settings</h2>
+
+            <button
+              onClick={() => setOpenSettings(false)}
+              className="text-white text-3xl font-bold hover:text-red-500 absolute top-4 right-5"
+            >
+              ×
+            </button>
+
             <div className="space-y-2">
               <SettingsItem icon={<FaMoon />} title="Theme" value={dark ? "Dark" : "Light"} onClick={() => setDark(!dark)} />
               <SettingsItem icon={<FaBell />} title="Notifications" value="Enabled" />
