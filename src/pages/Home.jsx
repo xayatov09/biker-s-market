@@ -8,8 +8,8 @@ export default function Home({ search }) {
   );
 
   return (
-    <div className="p-6">
-      <div className="grid gap-6 md:grid-cols-3">
+    <div className="p-6 space-y-6 bg-gray-300 dark:bg-gray-900 min-h-screen">
+      <div className="grid gap-6 bg-gray-200 dark:bg-gray-900 md:grid-cols-3">
         {filtered.length === 0
           ? <Skeleton />
           : filtered.map((p) => (

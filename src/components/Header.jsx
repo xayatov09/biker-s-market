@@ -11,7 +11,14 @@ import {
   FaShieldAlt,
   FaQuestionCircle,
   FaChevronRight,
+  FaRegSun,
+  FaArrowLeft,
+  FaArrowRight,
 } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
+import { CgProfile } from "react-icons/cg";
+import { IoMdSettings } from "react-icons/io";
+import { BsBox2Fill } from "react-icons/bs";
 
 export default function Header({ search, setSearch }) {
   const navigate = useNavigate();
@@ -45,8 +52,8 @@ export default function Header({ search, setSearch }) {
 
   return (
     <>
-      <header className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center p-4 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
-        <Link to="/" className="text-xl font-bold text-purple-600 dark:text-purple-400 shadow-lg hover:scale-110 transition-transform">
+      <header className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center p-4 bg-gray-200 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
+        <Link to="/" className="text-xl font-bold text-purple-600 dark:text-purple-400 hover:scale-110 transition-transform">
           BikeShop
         </Link>
 
@@ -54,16 +61,22 @@ export default function Header({ search, setSearch }) {
           placeholder="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-1/3 px-3 py-2 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500"
+          className="w-full md:w-1/3 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500"
         />
 
-        <div className="flex items-center gap-3 relative">
-          <button onClick={() => setDark(!dark)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-            {dark ? "☀️" : "🌙"}
+
+        <div className="flex items-center gap-3 relative bg-gray-300 dark:bg-gray-900 p-2 rounded-lg">
+
+          <button onClick={() => navigate(-1)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 cursor-pointer">
+            <FaArrowLeft />
+          </button>
+
+          <button onClick={() => setDark(!dark)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 cursor-pointer">
+            {dark ? <FaRegSun className="text-yellow-300 w-5 h-5" /> : <FaMoon className="text-yellow-600 w-5 h-5" />}
           </button>
 
           <Link to="/favorites" className="relative p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-red-500">
-            <FaHeart />
+            <FaHeart className="text-red-500 w-5 h-5" />
             {favoritesCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
                 {favoritesCount}
@@ -72,7 +85,7 @@ export default function Header({ search, setSearch }) {
           </Link>
 
           <Link to="/cart" className="relative p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-            🛒
+            <FaCartShopping className="text-blue-600 dark:text-blue-400 w-5 h-5 " />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
                 {cartCount}
@@ -80,7 +93,11 @@ export default function Header({ search, setSearch }) {
             )}
           </Link>
 
-          <Link to="/orders" className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">📦</Link>
+
+
+          <Link to="/orders" className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+            <BsBox2Fill className="text-yellow-500 dark:text-yellow-300 w-5 h-5" />
+          </Link>
 
           {/* PROFILE */}
           <div className="relative">
@@ -91,8 +108,12 @@ export default function Header({ search, setSearch }) {
               }}
               className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700"
             >
-              👤
+              <CgProfile className="text-blue-700 dark:text-gray-300 w-5 h-5" />
             </button>
+
+
+
+
 
             {/* PROFILE DROPDOWN */}
             {user && openProfile && (
@@ -120,9 +141,10 @@ export default function Header({ search, setSearch }) {
             )}
           </div>
 
-          <button onClick={() => setOpenSettings(true)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-            <FaEllipsisV />
+          <button onClick={() => navigate(+1)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 cursor-pointer">
+            <FaArrowRight />
           </button>
+
         </div>
       </header>
 
@@ -130,24 +152,7 @@ export default function Header({ search, setSearch }) {
       {openSettings && (
         <div className="fixed inset-0 z-50 bg-black/60 flex justify-center items-center">
           <div className="w-full max-w-lg bg-[#0d0d0d] rounded-2xl p-6 text-white">
-            <h2 className="text-2xl font-semibold mb-6">Settings</h2>
 
-            <button
-              onClick={() => setOpenSettings(false)}
-              className="text-white text-3xl font-bold hover:text-red-500 absolute top-4 right-5"
-            >
-              ×
-            </button>
-
-            <div className="space-y-2">
-              <SettingsItem icon={<FaMoon />} title="Theme" value={dark ? "Dark" : "Light"} onClick={() => setDark(!dark)} />
-              <SettingsItem icon={<FaBell />} title="Notifications" value="Enabled" />
-              <SettingsItem icon={<FaShieldAlt />} title="Confidentiality" />
-              <SettingsItem icon={<FaQuestionCircle />} title="Help" noBorder />
-            </div>
-            <button onClick={() => setOpenSettings(false)} className="mt-6 w-full py-3 rounded-xl bg-white text-black font-medium">
-              Close
-            </button>
           </div>
         </div>
       )}

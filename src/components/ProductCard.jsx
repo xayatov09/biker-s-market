@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart, FaShoppingCart, FaTrash, FaTimes } from "react-icons/fa";
@@ -6,9 +5,6 @@ import { FaHeart, FaRegHeart, FaShoppingCart, FaTrash, FaTimes } from "react-ico
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
-  /* =========================
-     LOCAL STORAGE HELPERS
-  ========================= */
   const getFavorites = () =>
     JSON.parse(localStorage.getItem("favorites") || "[]");
 
@@ -21,24 +17,16 @@ export default function ProductCard({ product }) {
   const saveCart = (data) =>
     localStorage.setItem("cart", JSON.stringify(data));
 
-  /* =========================
-     STATES
-  ========================= */
   const [isFavorite, setIsFavorite] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  /* =========================
-     INITIAL LOAD
-  ========================= */
   useEffect(() => {
     setIsFavorite(getFavorites().some(p => p.id === product.id));
     setIsInCart(getCart().some(p => p.id === product.id));
   }, [product.id]);
 
-  /* =========================
-     FAVORITES TOGGLE
-  ========================= */
+
   const toggleFavorite = () => {
     let favorites = getFavorites();
 
@@ -54,9 +42,6 @@ export default function ProductCard({ product }) {
     window.dispatchEvent(new Event("storage"));
   };
 
-  /* =========================
-     CART ADD / REMOVE
-  ========================= */
   const addToCart = () => {
     let cart = getCart();
     if (!cart.some(p => p.id === product.id)) {
@@ -74,9 +59,6 @@ export default function ProductCard({ product }) {
     window.dispatchEvent(new Event("storage"));
   };
 
-  /* =========================
-     BUY NOW
-  ========================= */
   const buyNow = () => {
     navigate("/checkout", {
       state: {
@@ -85,30 +67,29 @@ export default function ProductCard({ product }) {
     });
   };
 
-  /* =========================
-     JSX
-  ========================= */
+
+
   return (
-    <>
-      {/* CARD */}
+    <div className="relative rounded-2xl ">
+
       <div
         onClick={() => setShowModal(true)}
-        className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-black dark:text-white rounded-2xl overflow-hidden transition hover:shadow-lg cursor-pointer"
+        className="dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-black dark:text-white rounded-2xl overflow-hidden transition hover:shadow-lg cursor-pointer"
       >
-        {/* IMAGE */}
+
         <div className="w-full h-48 bg-gray-100 dark:bg-gray-800">
           <img
             src={product.image}
             alt={product.name}
             loading="lazy"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform hover:scale-95"
             onError={(e) => (e.target.src = "/no-image.png")}
           />
         </div>
 
-        {/* CONTENT */}
-        <div className="p-4 bg-white dark:bg-gray-900">
-          <h3 className="font-semibold text-lg line-clamp-1">{product.name}</h3>
+
+        <div className="p-4 bg-white dark:text-white dark:bg-gray-900">
+          <h3 className="font-semibold dark:text-white text-lg line-clamp-1">{product.name}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">
             {product.description}
           </p>
@@ -116,7 +97,7 @@ export default function ProductCard({ product }) {
             ${product.price}
           </p>
 
-          {/* ACTIONS */}
+
           <div className="flex items-center gap-2 mt-4">
             {!isInCart ? (
               <button
@@ -153,7 +134,7 @@ export default function ProductCard({ product }) {
         </div>
       </div>
 
-      {/* MODAL */}
+   
       {showModal && (
         <div
           onClick={() => setShowModal(false)}
@@ -163,7 +144,7 @@ export default function ProductCard({ product }) {
             onClick={(e) => e.stopPropagation()}
             className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-md relative"
           >
-            {/* CLOSE BUTTON */}
+
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -171,26 +152,25 @@ export default function ProductCard({ product }) {
               <FaTimes />
             </button>
 
-            {/* PRODUCT IMAGE */}
+
             <img
               src={product.image}
               alt={product.name}
               className="w-full h-64 object-cover rounded-xl mb-4"
             />
 
-            {/* PRODUCT INFO */}
+     
             <h2 className="text-xl font-bold">{product.name}</h2>
             <p className="text-gray-600 dark:text-gray-400 mt-2">{product.description}</p>
             <p className="mt-2 font-bold text-purple-600 dark:text-purple-400">${product.price}</p>
 
-            {/* FILTER / INFO */}
+
             <div className="mt-4 text-sm text-gray-500 dark:text-gray-300">
               Color: {product.color || "Default"} <br />
               Size: {product.size || "N/A"} <br />
               Stock: {product.stock || "Available"}
             </div>
 
-            {/* ACTIONS INSIDE MODAL */}
             <div className="flex items-center gap-2 mt-4">
               {!isInCart ? (
                 <button
@@ -225,6 +205,6 @@ export default function ProductCard({ product }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
